@@ -1,0 +1,47 @@
+public class Movement2D : MonoBehaviour
+{
+    Rigidbody2D rigid;
+    public float speed;
+    public float JumpPower;
+    bool isjumping;
+    private void Awake()
+    {
+        rigid = GetComponent<Rigidbody2D>();
+    }
+
+    private void FixedUpdate()
+    {
+        Move();
+        Jump();
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isjumping = false;
+        }
+    }
+    private void Move()
+    {
+        if(Input.GetKey(KeyCode.LeftArrow))
+        {
+            transform.position = new Vector2(transform.position.x - speed * Time.deltaTime, transform.position.y);
+        }
+        if (Input.GetKey(KeyCode.RightArrow))
+        {
+            transform.position = new Vector2(transform.position.x + speed * Time.deltaTime, transform.position.y);
+        }
+    }
+    private void Jump()
+    {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            if (isjumping == false)
+            {
+                rigid.AddForce(Vector2.up * JumpPower, ForceMode2D.Impulse);
+                isjumping = true;
+            }
+            else return;
+        }
+    }
+}
